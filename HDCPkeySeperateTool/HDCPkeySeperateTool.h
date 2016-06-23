@@ -13,6 +13,18 @@ public:
 	~HDCPKeySeperateTool();
 
 	/*
+	Check the validity of given file.
+	param inFile : The file to be checked.
+	param headLength : The head of file is a field record the count of keys in this file.
+						headLength is the length(Byte) of this field.
+	param keyLength : The length of an individual key.
+	param keyCountFormat : The format of headLength.
+	return : 0: Checked ok. 1: The file can't be open. 2:headLength not mach the file.
+			3:keyLength not mach the file. 4:keyLength or keyCountFormat not mach the file. 
+	*/
+	int checkKeyFormat(char * inFile, int headLength, int keyLength,int keyCountFormat);
+
+	/*
 	parameter:
 	newKeyCount:the count of key that will seperated into target HDCP key file
 	newKeyLoc:the first index of key in input HDCP key file that begin to seperate into target HDCP key file

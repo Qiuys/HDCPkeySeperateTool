@@ -253,3 +253,16 @@ int HDCPKeySeperateTool::seperateKeys(int newKeyCount,int newKeyLoc) {
 	cout << "Seperate Success!" << endl;
 	return 0;
 }
+
+
+int HDCPKeySeperateTool::checkKeyFormat(char * inFile, int headLength, int keyCountFormat, int keyLength){
+//1. check whether the file can be open.
+	FILE * tempInFile;
+	tempInFile =  fopen(inFile, "rb");
+	if (tempInFile == NULL) {
+		//open file failed
+		cout << "Open Key File Error!" << endl;
+		return 1;// return -1,means the key file can not be opened.Maybe it is not exist.
+	}
+	return 0;
+}
