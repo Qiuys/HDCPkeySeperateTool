@@ -21,9 +21,15 @@
     <ClCompile Include="SeperateMain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="KeyToolManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HDCPkeySeperateTool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyToolManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

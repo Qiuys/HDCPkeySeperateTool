@@ -10,6 +10,7 @@ public:
 	outFile:file path  of target HDCP key file
 	*/
 	HDCPKeySeperateTool(char * inFile,char* outFile);
+	HDCPKeySeperateTool();
 	~HDCPKeySeperateTool();
 
 	/*
@@ -23,6 +24,15 @@ public:
 			3:keyLength not mach the file. 4:keyLength or keyCountFormat not mach the file. 
 	*/
 	int checkKeyFormat(char * inFile, int headLength, int keyLength,int keyCountFormat);
+
+	//2.第二步，检查需要提取的key数量是否会超出key文件的范围
+	/*
+	param keyBeginNum : The number of first key to be seperated from file.
+	param keyCount : The count of keys to be seperated from file.
+	return : 0:Can be seperated successfully 1:param is unavailable
+	2:The keys in file are not enough
+	*/
+	int checkCommand(int keyBeginNum, int keyCount);
 
 	/*
 	parameter:
@@ -66,6 +76,7 @@ private:
 
 	int getHDCPKeyCountThird();
 
+	int readKeyCountFormat1(FILE * InFile, int headLength);
 	/*
 	get a key from file then store in char* aKey.
 	return 0 when success

@@ -147,10 +147,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="HDCPkeySeperateTool.cpp" />
+    <ClCompile Include="KeyToolManager.cpp" />
     <ClCompile Include="SeperateMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HDCPkeySeperateTool.h" />
+    <ClInclude Include="KeyToolManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

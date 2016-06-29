@@ -42,9 +42,32 @@ using namespace std;
 
 	return 0;
 }*/
+/*
 int readKeyCountFormat1(FILE * InFile, int headLength);
 int checkKeyFormat(char * inFile, int headLength, int keyLength, int keyCountFormat);
-int checkKeyFormat(char * inFile, int headLength, int keyLength ,int keyCountFormat) {
+int checkCommand(int keyBeginNum, int keyCount);
+int totalKeyCount = 10;//文件中key的总个数
+*/
+/*将1000个key显示为 00 00 03 E8*/
+/*
+int readKeyCountFormat1(FILE * InFile, int headLength) {
+	int m;//current byte that getted from file
+	int sum = 0;//count of key
+	int weights = 1;//weight of current byte
+	for (int i = 1;i < headLength;i++) {
+		weights *= 256;
+	}
+
+	for (int i = 0;i < headLength;i++) {
+		m = fgetc(InFile);
+		sum += m*weights;
+		weights /= 256;
+	}
+	return sum;
+}
+*/
+//1.第一步，检查输入的参数与key文件是否匹配。
+/*int checkKeyFormat(char * inFile, int headLength, int keyLength ,int keyCountFormat) {
 	//1. check inFile
 	FILE * tempInFile;
 	tempInFile = fopen(inFile, "rb");
@@ -86,27 +109,36 @@ int checkKeyFormat(char * inFile, int headLength, int keyLength ,int keyCountFor
 	fclose(tempInFile);
 	return 0;
 }
+*/
 
-//test function checkKeyFormat
-int main() {
-	char *inFile = "E:/work/VS/tempTestKey/HDCP_KEY_10_1-10.bin";
-	checkKeyFormat(inFile,4,308,1);
+//2.第二步，检查需要提取的key数量是否会超出key文件的范围
+/*
+param keyBeginNum : The number of first key to be seperated from file.
+param keyCount : The count of keys to be seperated from file.
+return : 0:Can be seperated successfully 1:param is unavailable
+		 2:The keys in file are not enough
+*/
+/*
+int checkCommand(int keyBeginNum, int keyCount) {
+	if (keyBeginNum <= 0 || keyCount <= 0) {
+		cout << "keyBeginNum or keyCount is unavailable!" << endl;
+		return 1;
+	}
+	int keyLastNum = keyBeginNum + keyCount - 1;
+	if (keyLastNum > totalKeyCount) {
+		cout << "keys are not enough for you!" << endl;
+		return 2;
+	}
 	return 0;
 }
 
-/*将1000个key显示为 00 00 03 E8*/
-int readKeyCountFormat1(FILE * InFile, int headLength) {
-	int m;//current byte that getted from file
-	int sum = 0;//count of key
-	int weights = 1;//weight of current byte
-	for (int i = 1;i < headLength;i++) {
-		weights *= 256;
-	}
+*/
 
-	for (int i = 0;i < headLength;i++) {
-		m = fgetc(InFile);
-		sum += m*weights;
-		weights /= 256;
-	}
-	return sum;
+
+//test function checkKeyFormat
+int main() {
+	//char *inFile = "E:/work/VS/tempTestKey/HDCP_KEY_10_1-10.bin";
+	//checkKeyFormat(inFile,4,308,1);
+	return 0;
 }
+
