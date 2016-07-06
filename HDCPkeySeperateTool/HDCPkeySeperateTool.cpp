@@ -259,7 +259,7 @@ int HDCPKeySeperateTool::seperateKeys(int newKeyCount,int newKeyLoc) {
 
 
 //1.第一步，检查输入的参数与key文件是否匹配。
-int HDCPKeySeperateTool::checkKeyFormat(char * inFile, int headLength, int keyLength, int keyCountFormat) {
+int HDCPKeySeperateTool::checkKeyFormat(char * inFile, int headLength, int keyLength, int keyCountFormat, int aimkeyCountFormat) {
 	//1. check inFile
 	FILE * tempInFile;
 	tempInFile = fopen(inFile, "rb");
@@ -288,7 +288,7 @@ int HDCPKeySeperateTool::checkKeyFormat(char * inFile, int headLength, int keyLe
 		return 3;
 	}
 
-	//4. check keyLength and keyCountFormat
+	//4. check keyLength and keyCountFormat TODO:检查keyCountFormat的逻辑
 	int readKeyCount1 = readKeyCountFormat1(tempInFile, headLength);
 	cout << "readKeyCountFormat1 = " << readKeyCount1 << endl;
 	if (headLength + readKeyCount1*keyLength != fileSize) {
@@ -299,6 +299,7 @@ int HDCPKeySeperateTool::checkKeyFormat(char * inFile, int headLength, int keyLe
 
 	cout << "Check Successful!" << endl;
 	fclose(tempInFile);
+	//TODO: 检查并设置aimkeyCountFormat
 	return 0;
 }
 

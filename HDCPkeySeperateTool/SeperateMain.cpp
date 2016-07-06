@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
+#include <afx.h>
 using namespace std;
 #include "HDCPKeySeperateTool.h"
 /*int main() {
@@ -139,6 +140,27 @@ int checkCommand(int keyBeginNum, int keyCount) {
 int main() {
 	//char *inFile = "E:/work/VS/tempTestKey/HDCP_KEY_10_1-10.bin";
 	//checkKeyFormat(inFile,4,308,1);
+
+	char *  out = "C:/Users/sorou/Desktop/testfolder/";
+	char * name = "ha|ha";
+	
+	// \ / : * ? " < > |
+	
+	if (name != NULL && name !="") {
+		char * temp = NULL;
+		char * donotuse[10] = { "/","\\",":","*","?","\"","<",">","|"," "};
+		int donotuseLen = sizeof(donotuse) / sizeof(char*);
+		for (int i = 0;i < donotuseLen;i++) {
+			cout << "Finding " << donotuse[i]<< endl;
+			temp = strstr(name, donotuse[i]);
+			if (temp != NULL) {
+				cout << "Error file prefix! Contains \'" << donotuse[i]<< "\'" << endl;
+				temp = NULL;
+			}
+		}
+	}
+	cout << "Finish" << endl;
+
 	return 0;
 }
 

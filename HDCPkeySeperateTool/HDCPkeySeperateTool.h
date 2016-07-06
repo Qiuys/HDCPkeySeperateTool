@@ -23,7 +23,7 @@ public:
 	return : 0: Checked ok. 1: The file can't be open. 2:headLength not mach the file.
 			3:keyLength not mach the file. 4:keyLength or keyCountFormat not mach the file. 
 	*/
-	int checkKeyFormat(char * inFile, int headLength, int keyLength,int keyCountFormat);
+	int checkKeyFormat(char * inFile, int headLength, int keyLength,int keyCountFormat, int aimkeyCountFormat);
 
 	//2.第二步，检查需要提取的key数量是否会超出key文件的范围
 	/*

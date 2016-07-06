@@ -1,4 +1,5 @@
 #include "KeyToolManager.h"
+#include <afx.h>
 using namespace std;
 
 int KeyToolManager::setInFile(char * in) {
@@ -12,45 +13,117 @@ int KeyToolManager::setInFile(char * in) {
 	return 0;
 }
 
-int KeyToolManager::setOutFile(char * out) {
-	if (out == NULL) {
-		return -1;
-	}
-	//TODO: do some check here!
-	outFile = out;
-	return 0;
-}
-
-/*根据keyType选择不同key的参数检查流程。当前只支持 keyType==1（HDCP key)*/
-int KeyToolManager::setParameters(int keyType, int headLength, int keyLength, int keyCountFormat) {
+/*选择要分割的密钥类型keyType 当前只支持 keyType==1（HDCP key)*/
+int KeyToolManager::setKeyType(int keyType) {
 	cout << "Key Type is " << keyType<< endl;
-	if (headLength <= 0 || headLength <= 0) {
-		cout << "headLength or headLength is unavailable! " << endl;
-		return 1;
-	}
 	switch (keyType) {
 	case 1:
-		if (0 != newHDCPKeySeperateTool()) {
-			return 2;
-		}
-		int cresult = HDCP_Tool->checkKeyFormat(inFile, headLength, keyLength, keyCountFormat);
-		if (cresult != 0) {
-			return 3;
-		}
+		keyType = 1;
 		break;
 	default:
 		cout << "Unavailable Key Type: " << keyType << endl;
+		keyType = 0;
 		return 10;
 	}
 	return 0;
 }
 
-int KeyToolManager::newHDCPKeySeperateTool() {
+
+int KeyToolManager::setHDCPKeyFormat(int headLength, int keyLength, int keyCountFormat,int aimkeyCountFormat) {
 	HDCP_Tool =new HDCPKeySeperateTool();
+	if (HDCP_Tool->checkKeyFormat(inFile, headLength, keyLength, keyCountFormat, aimkeyCountFormat) != 0) {
+		return 1;
+	}
 	return 0;
 }
 
 
+int KeyToolManager::setHDCPKeySeperateParam(int keyBeginNum, int keyEachFile, int keyFileCount){
+	if (keyBeginNum <= 0 || keyEachFile <= 0 || keyFileCount <= 0) {
+		cout << "setHDCPKeySeperateParam is wrong!" << endl;
+		return 1;
+	}
+
+	if (HDCP_Tool->checkCommand(keyBeginNum, keyEachFile*keyFileCount) != 0) {
+		return 2;
+	}
+	KeyToolManager::keyBeginNum = keyBeginNum;
+	KeyToolManager::keyEachFile = keyEachFile;
+	KeyToolManager::keyFileCount = keyFileCount;
+	cout << "setHDCPKeySeperateParam finish." << endl;
+	return 0;
+}
+
+int KeyToolManager::startSeperate() {
+	return 0;
+}
+
+int KeyToolManager::setOutFile(char * out,char * fprefix) {
+	if (out == NULL || out == "" || fprefix == NULL){
+		cout << "Wrong out put folder or file prefix!" << endl;
+		return 1;
+	}
+	//TODO: Check space of the folder is enough or not.
+	//TODO: Check the folder is writable or not.
+
+	//Check wether the out put folder url is end with "/"
+	int outLen = strlen(out);
+	if (out[outLen - 1] != '/') {
+		char * aimOut = (char *)malloc(1024);
+		strcpy(aimOut, out);
+		strcat(aimOut, "/");
+		out = aimOut;
+	}
+
+	//Check wether the out put file name contains  \ / : * ? " < > |
+	if (fprefix != "") {
+		char * temp = NULL;
+		char * donotuse[10] = { "/","\\",":","*","?","\"","<",">","|"," " };
+		int donotuseLen = sizeof(donotuse) / sizeof(char*);
+		for (int i = 0;i < donotuseLen;i++) {
+			temp = strstr(fprefix, donotuse[i]);
+			if (temp != NULL) {
+				cout << "Error file prefix! Contains \'" << donotuse[i] << "\'" << endl;
+				return 4;
+			}
+		}
+	}
+
+	//Check wether the out put folder is exist.
+	struct _stat fileStat;
+	if (!((_stat(out, &fileStat) == 0) && (fileStat.st_mode & _S_IFDIR)))
+	{
+		cout << "Out put folder not exsit!" << endl;
+		return 5;
+	}
+
+	//Check wether the out put folder is empty.
+	char * dest = NULL;
+	dest = (char *)malloc(1024);
+	char * postfix = "*.*";
+	strcpy(dest, out);
+	strcat(dest, postfix);
+
+	CString csout = dest;
+	CFileFind cff;
+	BOOL finding = cff.FindFile(csout);
+	while (finding)
+	{
+		finding = cff.FindNextFile();
+		if (cff.IsDots()) {
+			continue;//skip . and ..
+		}
+		else {
+			cout << "Out put folder is not empty!" << endl;
+			cff.Close();
+			return 6;
+		}
+	}
+	cff.Close();
+	outFolder = out;
+	filePrefix = fprefix;
+	return 0;
+}
 /*int main() {
 char *inFile = "E:/work/GS KEY/GS HDCP key/HDCP_Key.bin";
 //char *outFile = "E:/work/GS HDCP key/20151226/HDCP_KEY_500_24211-24710.bin";

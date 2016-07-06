@@ -6,13 +6,16 @@
 class KeyToolManager {
 public:
 	int setInFile(char * inFile);
-	int setOutFile(char * outFile);
-	int setParameters(int keyType, int headLength, int keyLength, int keyCountFormat);
-	
+	int setOutFile(char * out, char * filePrefix);
+	int setKeyType(int keyType);
+	int setHDCPKeyFormat(int headLength, int keyLength, int keyCountFormat, int aimkeyCountFormat);
+	int setHDCPKeySeperateParam(int KeyBeginNum, int KeyEachFile, int KeyFileCount);
+	int startSeperate();
+
 private:
-	int newHDCPKeySeperateTool();
 	HDCPKeySeperateTool * HDCP_Tool;
-	char * inFile, * outFile;
+	char * inFile, *outFolder, *filePrefix;
 	int keyType;
+	int keyBeginNum, keyEachFile, keyFileCount;
 };
 #endif
